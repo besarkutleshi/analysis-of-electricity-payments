@@ -22,6 +22,10 @@ class District():
     def get_Transaction_Sum_Month(self):
         return self.df.groupby(['Month']).size().to_frame('Sum').reset_index()
 
+    def get_Transaction_Sum_Comulative(self):
+        groupedData = self.get_Transaction_Sum_Month()
+        return groupedData['Sum'].cumsum()
+
 
 
 
