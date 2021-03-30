@@ -18,14 +18,18 @@ def home():
     disObj = ds.District(df)
     pd.set_option("display.max_columns", 8)
 
-    data = disObj.get_Transaction_Count_Month()
-    print(data)
+    averageAmount = disObj.get_SumAverage_Transaction()
 
-    comulative = disObj.get_Transaction_Count_Comulative()
-    print(comulative)
+    print(averageAmount)
 
-    pivotData = disObj.get_Transaction_Count_Month_Pivot()
-    print(pivotData)
+    #data = disObj.get_Transaction_Count_Month()
+    #print(data)
+
+    #comulative = disObj.get_Transaction_Count_Comulative()
+    #print(comulative)
+
+    #pivotData = disObj.get_Transaction_Count_Month_Pivot()
+    #print(pivotData)
 
     out = df.to_json(orient='records')[1:-1].replace('},{', '} {')
     return out;
