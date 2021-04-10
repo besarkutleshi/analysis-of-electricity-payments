@@ -1,55 +1,64 @@
-"""
-Routes and views for the flask application.
-"""
-
 from datetime import datetime
 from flask import render_template
 from PythonAPI import app
 import pandas as pd
 from PythonAPI import District as ds
+from flask import jsonify
+
+
+disObj = ds.District()
+
 
 @app.route('/')
 @app.route('/home')
 def home():
-    df = pd.read_excel (r'C:\Users\keds30604\Desktop\PythonDataset.xlsx');
-    df['Year'] = pd.DatetimeIndex(df['TransactionDate']).year
-    df['Month'] = pd.DatetimeIndex(df['TransactionDate']).month
-    df['District'] = df['JournalID'].str[0:3]
-    disObj = ds.District(df)
-    pd.set_option("display.max_columns", 8)
+    return jsonify(str(1))
 
-    averageAmount = disObj.get_SumAverage_Transaction()
+@app.route('/getAllTransaction/<district>/<year>')
+def allTransaction(district,year):
+    print(district)
+    print(year)
+    disObj = ds.District(year,str(district))
+    disObj.get_All_Transaction()
+    return jsonify(str(1))
 
-    print(averageAmount)
+@app.route('/getTransactionCount')
+def transactionCount():
+    count = disObj.get_Total_Transaction()
+    #out = count.to_json(orient='records')[1:-1].replace('},{', '} {')
+    return jsonify(str(count))
 
-    #data = disObj.get_Transaction_Count_Month()
-    #print(data)
+@app.route('/getTransactionAverageMonth')
+def transactionAverageMonth():
+     count = disObj.get_Transaction_Average_Month()
+     return jsonify(str(count))
 
-    #comulative = disObj.get_Transaction_Count_Comulative()
-    #print(comulative)
-
-    #pivotData = disObj.get_Transaction_Count_Month_Pivot()
-    #print(pivotData)
-
-    out = df.to_json(orient='records')[1:-1].replace('},{', '} {')
-    return out;
-
-@app.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page.'
-    )
-
-@app.route('/about')
+@app.route('/getWithMostBills')
 def about():
-    """Renders the about page."""
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )
+    mostMonth = disObj.get_MaxTransactions_Count_Month()
+    return mostMonth.to_json(orient='records')[1:-1].replace('},{', '} {')
+
+
+@app.route('/getMonthsTransaction')
+def getMonthsTransactions():
+    list = disObj.get_Transaction_Count_Month().to_dict(orient='records')
+    return jsonify(list)
+
+@app.route('/getTransactonMonthPercentage')
+def getTransactonMonthPercentage():
+    return jsonify(disObj.get_Percentage_Count())
+
+
+@app.route('/getComulativeTransactionCount')
+def getComulativeTransactionCount():
+    print(disObj.get_Transaction_Count_Comulative())
+    list = disObj.get_Transaction_Count_Comulative().to_dict(orient='records')
+    return jsonify(list)
+
+@app.route('/getIntervalTransactions')
+def get_Interval_Transactions():
+    return returnJsonDF(disObj.get_Transaction_Count_interval())
+
+def returnJsonDF(df):
+    list = df.to_dict(orient='records')
+    return jsonify(list)

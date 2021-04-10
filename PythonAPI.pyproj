@@ -12,12 +12,13 @@
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <LaunchProvider>Web launcher</LaunchProvider>
-    <WebBrowserUrl>http://localhost</WebBrowserUrl>
+    <WebBrowserUrl>http://localhost/</WebBrowserUrl>
     <OutputPath>.</OutputPath>
     <SuppressCollectPythonCloudServiceFiles>true</SuppressCollectPythonCloudServiceFiles>
     <Name>PythonAPI</Name>
     <RootNamespace>PythonAPI</RootNamespace>
     <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <WebBrowserPort>5000</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,7 +29,13 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="PythonAPI\DbConnection.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PythonAPI\District.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PythonAPI\DistrictService.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="runserver.py" />
