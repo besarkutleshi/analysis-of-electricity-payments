@@ -81,12 +81,12 @@ class District:
 
     # get transaction average 
     def get_SumAverage_Transaction(self):
-        return np.mean(self.District['TransactionAmount'])
+        return np.mean(District.df['TransactionAmount'])
 
     # get month that has the largest amount of transactions
     def get_MaxTransactions_Amount_Month(self):
         month_Amounts = self.get_Transaction_Sum_Month()
-        month_Amounts.sort_values("Sum", ascending=False)
+        month_Amounts.sort_values("Month", ascending=False)
         return month_Amounts.head(1)
 
     #find percentage of months in total transaction
@@ -94,19 +94,22 @@ class District:
         totalAmount = self.get_Amount_Transaction()
         amounts = self.get_Transaction_Sum_Month()
         amounts.sort_values("Month")
+        print(amounts)
         percentage_List = []
         for index, row in amounts.iterrows():
-            percentage = (row['Sum'] / totalAmount) * 100
+            percentage = (row['Count'] / totalAmount) * 100
             obj = {
                 "Month":row['Month'],
-                "Amount":percentage
+                "Count":percentage
             }
             percentage_List.append(obj)
+        print(percentage_List)
         return percentage_List
 
     # find sum of transaction per month
     def get_Transaction_Sum_Month(self):
-        return District.df.groupby(['District','Month']).sum().to_frame('Sum').reset_index()
+        df = District.df.groupby('Month', sort=False)["TransactionAmount"].sum().reset_index(name ='Count')
+        return df.sort_values("Month")
 
     # find comulative sum of transaction
     def get_Transaction_Sum_Comulative(self):
