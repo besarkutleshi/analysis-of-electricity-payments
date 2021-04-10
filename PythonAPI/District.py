@@ -119,13 +119,11 @@ class District:
         pvtTable = pd.pivot_table(data=table,values=['Month'],index=['District','SUM'])
         return pvtTable
 
-    #find median value of transaction amount
-    def get_MedianValue_Transaction(self):
-        return np.median(District.df['TransactionAmount'])
 
-    def get_PercentileValue_Transaction(self,percentage):
-        return np.percentile(District.df['TransactionAmount'],percentage)
-
+    def get_Transaction_Amount_interval(self):
+       df = self.districtService.get_Transaction_Amount_Interval(self.year)
+       return df
+            
 
 
 

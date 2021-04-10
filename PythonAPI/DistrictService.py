@@ -20,7 +20,7 @@ class DistrictService():
         df = pd.read_sql(query, conn)
         return df
         
-    def get_Transaction_Count_Interval(self,year):
+    def get_Transaction_Amount_Interval(self,year):
         conn = self.db.get_Connection()
         cursor = conn.cursor()
         execProcedure = "Exec dbo.usp_TransactionAmount_Interval @year = " + str(year)
